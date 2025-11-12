@@ -1,0 +1,612 @@
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>klyr4nn | Loja Underground de Cursos e Ferramentas</title>
+  <meta name="description" content="Loja underground do klyr4nn: cursos profissionais, packs e ferramentas. Pagamento na Kiwify. Estatísticas de vendas e preço do Bitcoin ao vivo." />
+  <meta property="og:title" content="klyr4nn | Loja Underground" />
+  <meta property="og:description" content="Cursos profissionais, packs e ferramentas. Kiwify + Bitcoin. Vibe underground com dados ao vivo." />
+  <meta property="og:image" content="https://cdn.discordapp.com/attachments/1411445673626435745/1438294584189915269/Icon.jpg?ex=69165bb7&is=69150a37&hm=ba6d59109c46b95b8a8e0ee81129ac58777dbcdf6d43cf20495545fe3d9fee38&" />
+  <meta name="theme-color" content="#00ff88" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --panel: #111214;
+      --muted: #9aa3a8;
+      --fg: #e8f1ee;
+      --brand: #00ff88;
+      --brand-2: #00d17a;
+      --danger: #ff4d6d;
+      --ok: #4dffb3;
+      --ring: 0 0 0 2px color-mix(in oklab, var(--brand), #000 70%);
+      --shadow-1: 0 10px 30px rgba(0,0,0,.35);
+      --shadow-neon: 0 0 24px rgba(0,255,136,.25), 0 0 4px rgba(0,255,136,.6);
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+    }
+    /* Tema cinza alternativo */
+    .theme-gray {
+      --brand: #9bd0ff;
+      --brand-2: #6aa8ff;
+      --bg: #0e0f11;
+      --panel: #14161a;
+      --fg: #eef1f4;
+      --muted: #a8b0b8;
+      --shadow-neon: 0 0 20px rgba(155,208,255,.18), 0 0 4px rgba(155,208,255,.5);
+    }
+
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--fg);
+      background: radial-gradient(1200px 600px at 80% -10%, rgba(0,255,136,.08), transparent 60%),
+                  radial-gradient(900px 500px at -10% 20%, rgba(0,255,136,.06), transparent 60%),
+                  linear-gradient(180deg, #070708, var(--bg));
+      background-attachment: fixed;
+      letter-spacing: .2px;
+    }
+    .container { width: min(1200px, 92vw); margin: 0 auto }
+    a { color: var(--brand); text-decoration: none }
+    a:hover { text-decoration: underline }
+
+    /* Navbar */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(8px);
+      background: linear-gradient(180deg, rgba(10,12,12,.7), rgba(10,12,12,.35));
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 0;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      font-weight: 800; letter-spacing: .6px;
+      text-transform: lowercase;
+      font-size: 20px;
+    }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      outline: var(--ring);
+      background: #0b0b0c center/cover no-repeat;
+      box-shadow: var(--shadow-neon);
+      flex: 0 0 auto;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50% }
+    .glitch {
+      position: relative; display: inline-block; color: var(--fg);
+      text-shadow: 0 0 12px rgba(0,255,136,.35);
+      font-family: var(--mono);
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; left: 0; top: 0; width: 100%; overflow: hidden;
+      clip-path: inset(0 0 0 0);
+      opacity: .75; pointer-events: none;
+    }
+    .glitch::before { transform: translate(1px,0); color: #00ffaa88; mix-blend-mode: screen }
+    .glitch::after { transform: translate(-1px,0); color: #00ccff66; mix-blend-mode: screen }
+    .nav-links { display: flex; gap: 18px; align-items: center; }
+    .nav-links a { color: var(--fg); opacity: .88 }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      border: 1px solid color-mix(in oklab, var(--brand), #000 70%);
+      color: var(--fg);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--brand), #000 90%), #0c0e0e);
+      padding: 10px 16px; border-radius: 10px; text-decoration: none;
+      box-shadow: var(--shadow-neon);
+      font-weight: 600;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); text-decoration: none }
+    .btn.ghost { background: transparent; border-color: rgba(255,255,255,.14); box-shadow: none; color: var(--fg) }
+    .btn.small { padding: 8px 12px; font-size: 14px; }
+
+    /* Hero */
+    .hero { padding: 56px 0 22px }
+    .hero-grid {
+      display: grid; gap: 28px;
+      grid-template-columns: 1.1fr .9fr;
+    }
+    @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr } }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px; font-size: 12px;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px dashed color-mix(in oklab, var(--brand), #000 70%);
+      background: rgba(0,0,0,.35);
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 54px);
+      line-height: 1.05; margin: 6px 0 12px; letter-spacing: .4px;
+    }
+    .hero p { color: var(--muted); font-size: 18px; max-width: 62ch }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px }
+    .portrait {
+      justify-self: end; position: relative; width: 290px; height: 290px; border-radius: 24px;
+      background:
+        radial-gradient(40% 60% at 60% 30%, rgba(0,255,136,.2), transparent 70%),
+        radial-gradient(30% 40% at 30% 80%, rgba(0,255,136,.14), transparent 70%),
+        #0d0f10;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: var(--shadow-neon), var(--shadow-1);
+      overflow: hidden;
+    }
+    .portrait::after {
+      content: ""; position: absolute; inset: -2px; border-radius: 24px;
+      background: conic-gradient(from 120deg, transparent 0 58%, rgba(0,255,136,.14) 60% 70%, transparent 72% 100%);
+      filter: blur(12px); pointer-events: none;
+      animation: spin 12s linear infinite;
+      mask: radial-gradient(220px 220px at 140% -40%, rgba(0,0,0,1), transparent 70%);
+      opacity: .7;
+    }
+    @keyframes spin { to { transform: rotate(360deg) } }
+    .portrait img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: lighten; opacity: .92 }
+
+    /* Stats strip */
+    .stats {
+      display: grid; gap: 12px; grid-template-columns: repeat(4,1fr);
+      margin: 28px 0 8px;
+    }
+    @media (max-width: 900px) { .stats { grid-template-columns: 1fr 1fr } }
+    @media (max-width: 560px) { .stats { grid-template-columns: 1fr } }
+    .stat {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 14px 16px; border-radius: 12px;
+    }
+    .stat .k { color: var(--muted); font-size: 13px }
+    .stat .v { font-family: var(--mono); font-weight: 700; font-size: 20px; margin-top: 6px }
+
+    /* Section blocks */
+    .section { padding: 38px 0 }
+    .section h2 { font-size: 28px; margin: 0 0 12px }
+    .muted { color: var(--muted) }
+
+    /* Products */
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(3,1fr) }
+    @media (max-width: 980px) { .grid { grid-template-columns: 1fr 1fr } }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr } }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 16px; border-radius: 14px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .card h3 { margin: 4px 0; font-size: 20px }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--muted);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 4px 8px; border-radius: 999px;
+    }
+    .price { font-family: var(--mono); font-size: 16px; color: var(--fg) }
+    .card .cta-row { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap }
+
+    /* BTC panel */
+    .btc {
+      display: grid; gap: 16px; grid-template-columns: 1.1fr .9fr;
+    }
+    @media (max-width: 900px) { .btc { grid-template-columns: 1fr } }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; padding: 16px;
+    }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px }
+    .btc-ticker { font-family: var(--mono); font-size: 18px }
+    .up { color: var(--ok) } .down { color: var(--danger) }
+
+    /* FAQ */
+    details {
+      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px; padding: 12px 14px;
+    }
+    details + details { margin-top: 10px }
+    summary { cursor: pointer; font-weight: 600 }
+
+    /* Footer */
+    footer {
+      margin-top: 40px; padding: 28px 0 48px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: var(--muted); font-size: 14px;
+    }
+    .foot-grid { display: grid; gap: 16px; grid-template-columns: 1fr auto }
+    @media (max-width: 700px) { .foot-grid { grid-template-columns: 1fr } }
+
+    /* Admin mini-panel (opcional) */
+    .admin {
+      position: fixed; right: 16px; bottom: 16px; z-index: 60;
+      background: #0d1011; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px; padding: 10px; width: min(320px, 90vw);
+      display: none;
+    }
+    .admin h4 { margin: 0 0 8px; font-size: 14px; color: var(--muted) }
+    .admin .row { gap: 8px }
+    .admin input {
+      background: #0c0e10; border: 1px solid rgba(255,255,255,.12);
+      color: var(--fg); border-radius: 8px; padding: 8px; width: 100%;
+    }
+    .admin .btn { padding: 8px 10px }
+    .hint { font-size: 12px; color: var(--muted); margin-top: 6px }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">
+        <span class="avatar" title="klyr4nn">
+          <img alt="Foto de klyr4nn"
+               src="https://cdn.discordapp.com/attachments/1411445673626435745/1438294584189915269/Icon.jpg?ex=69165bb7&is=69150a37&hm=ba6d59109c46b95b8a8e0ee81129ac58777dbcdf6d43cf20495545fe3d9fee38&"
+               onerror="this.remove()">
+        </span>
+        <span class="glitch" data-text="klyr4nn">klyr4nn</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#cursos">Cursos</a>
+        <a href="#btc">Bitcoin</a>
+        <a href="#stats">Estatísticas</a>
+        <a href="#contato">Contato</a>
+        <button class="btn small ghost" id="themeToggle" type="button" aria-label="Trocar tema">Tema: Verde</button>
+        <a class="btn small" href="#cursos">Comprar agora</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="badge">Loja oficial • Vibe underground • Kiwify</div>
+          <h1>Conhecimento afiado, estética underground.</h1>
+          <p>Bem-vindo à base do <b>klyr4nn</b>. Cursos profissionais, packs e ferramentas para elevar seu jogo. Pagamento via Kiwify e atualizações constantes. Transparência total com estatísticas de vendas e preço do <b>Bitcoin</b> em tempo real.</p>
+          <div class="cta">
+            <a class="btn" href="#cursos">Ver cursos e packs</a>
+            <a class="btn ghost" href="#btc">Ver dados de Bitcoin</a>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Vendas totais</div>
+              <div class="v" id="s-vendas">0</div>
+            </div>
+            <div class="stat">
+              <div class="k">Receita (BRL)</div>
+              <div class="v" id="s-receita">R$ 0,00</div>
+            </div>
+            <div class="stat">
+              <div class="k">Ticket médio</div>
+              <div class="v" id="s-ticket">R$ 0,00</div>
+            </div>
+            <div class="stat">
+              <div class="k">BTC agora (BRL)</div>
+              <div class="v" id="s-btc">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="portrait">
+          <img alt="Foto de perfil de klyr4nn"
+               src="https://cdn.discordapp.com/attachments/1411445673626435745/1438294584189915269/Icon.jpg?ex=69165bb7&is=69150a37&hm=ba6d59109c46b95b8a8e0ee81129ac58777dbcdf6d43cf20495545fe3d9fee38&">
+        </div>
+      </div>
+    </section>
+
+    <section id="cursos" class="section">
+      <h2>Cursos e Packs</h2>
+      <p class="muted">Seleção de conteúdo profissional. Clique para pagar com segurança pela Kiwify.</p>
+
+      <div class="grid">
+        <!-- Exemplo 1 -->
+        <article class="card">
+          <div class="chip">Nível: Iniciante → Avançado</div>
+          <h3>Curso Profissional - Base Sólida</h3>
+          <p class="muted">Do zero ao avançado. Metodologia direta, exemplos práticos e suporte.</p>
+          <div class="row">
+            <span class="price" data-preco="497.00">R$ 497,00</span>
+            <span class="muted">Atualizações inclusas</span>
+          </div>
+          <div class="cta-row">
+            <!-- Troque o link para o seu checkout Kiwify -->
+            <a class="btn" href="https://pay.kiwify.com.br/SEU-CHECKOUT-1" target="_blank" rel="noopener">Comprar na Kiwify</a>
+            <a class="btn ghost" href="#faq">Ver conteúdo</a>
+          </div>
+        </article>
+
+        <!-- Exemplo 2 -->
+        <article class="card">
+          <div class="chip">Bundle</div>
+          <h3>Pack Underground Tools</h3>
+          <p class="muted">Ferramentas, templates e assets com estética underground para acelerar seu fluxo.</p>
+          <div class="row">
+            <span class="price" data-preco="297.00">R$ 297,00</span>
+            <span class="muted">Uso comercial liberado</span>
+          </div>
+          <div class="cta-row">
+            <a class="btn" href="https://pay.kiwify.com.br/SEU-CHECKOUT-2" target="_blank" rel="noopener">Comprar na Kiwify</a>
+            <a class="btn ghost" href="#faq">Detalhes</a>
+          </div>
+        </article>
+
+        <!-- Exemplo 3 -->
+        <article class="card">
+          <div class="chip">Mentoria</div>
+          <h3>Mentoria 1:1 com klyr4nn</h3>
+          <p class="muted">Sessão individual para montar sua estratégia e otimizar resultados.</p>
+          <div class="row">
+            <span class="price" data-preco="697.00">R$ 697,00</span>
+            <span class="muted">Agenda limitada</span>
+          </div>
+          <div class="cta-row">
+            <a class="btn" href="https://pay.kiwify.com.br/SEU-CHECKOUT-3" target="_blank" rel="noopener">Reservar pela Kiwify</a>
+            <a class="btn ghost" href="#contato">Tirar dúvidas</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="btc" class="section">
+      <h2>Bitcoin em tempo real</h2>
+      <p class="muted">Preço e variação diária. Atualiza automaticamente.</p>
+
+      <div class="btc">
+        <div class="panel">
+          <div class="row">
+            <div class="btc-ticker">BTC/BRL: <b id="btc-brl">—</b> <span id="btc-brl-chg" class="muted">0.00%</span></div>
+            <div class="btc-ticker">BTC/USD: <b id="btc-usd">—</b> <span id="btc-usd-chg" class="muted">0.00%</span></div>
+          </div>
+          <div class="hint">Fonte: Coinbase/Coingecko (fallback). Atualiza a cada 60s.</div>
+        </div>
+
+        <div class="panel" style="min-height: 320px;">
+          <!-- TradingView Mini Chart -->
+          <div class="tradingview-widget-container" style="height:300px;">
+            <div id="tv-btc" style="height:300px;"></div>
+            <div class="hint">Gráfico: TradingView</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stats" class="section">
+      <h2>Estatísticas de Vendas</h2>
+      <p class="muted">Resumo ao vivo (simulado localmente). Integração real pode ser feita via webhook/planilha depois.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Visão geral</h3>
+          <div class="row"><span class="muted">Vendas</span><b id="st-vendas">0</b></div>
+          <div class="row"><span class="muted">Receita</span><b id="st-receita">R$ 0,00</b></div>
+          <div class="row"><span class="muted">Ticket médio</span><b id="st-ticket">R$ 0,00</b></div>
+          <div class="row"><span class="muted">Última venda</span><b id="st-ultima">—</b></div>
+        </div>
+        <div class="card">
+          <h3>Top produtos</h3>
+          <div class="row"><span class="muted">Curso Profissional</span><b id="p1">0</b></div>
+          <div class="row"><span class="muted">Pack Underground</span><b id="p2">0</b></div>
+          <div class="row"><span class="muted">Mentoria 1:1</span><b id="p3">0</b></div>
+          <div class="hint">Use o mini painel admin para registrar vendas de teste.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <h2>Perguntas frequentes</h2>
+      <details>
+        <summary>Como funciona o pagamento?</summary>
+        <p class="muted">Você será direcionado para a Kiwify, que processa o pagamento com segurança (boleto, pix, cartão). Após a confirmação, recebe acesso imediato.</p>
+      </details>
+      <details>
+        <summary>Recebo atualização dos cursos?</summary>
+        <p class="muted">Sim. Sempre que o conteúdo evoluir, você recebe as novas aulas e materiais.</p>
+      </details>
+      <details>
+        <summary>Posso pagar em cripto?</summary>
+        <p class="muted">Atualmente, o checkout é pela Kiwify (BRL). Para cripto, fale no contato que combinamos.</p>
+      </details>
+    </section>
+
+    <section id="contato" class="section">
+      <h2>Contato</h2>
+      <p class="muted">Dúvidas rápidas? Chama que eu respondo.</p>
+      <div class="cta">
+        <!-- Troque para seus contatos -->
+        <a class="btn" href="https://wa.me/5599999999999" target="_blank" rel="noopener">WhatsApp</a>
+        <a class="btn ghost" href="mailto:contato@klyr4nn.com">contato@klyr4nn.com</a>
+        <a class="btn ghost" href="https://instagram.com/seu_user" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div>© <span id="year"></span> klyr4nn • Todos os direitos reservados • Underground, sempre.</div>
+      <div>
+        <a href="#" class="muted">Termos</a> • <a href="#" class="muted">Privacidade</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Painel admin (opcional) - pressione Shift + D para mostrar -->
+  <div class="admin" id="admin">
+    <h4>Admin rápido (local) — pressione Shift + D para abrir/fechar</h4>
+    <div class="row" style="margin-bottom:8px;">
+      <input id="valorVenda" type="number" step="0.01" placeholder="Valor da venda (BRL)">
+      <button class="btn small" id="btnAdd">Registrar venda</button>
+    </div>
+    <div class="row">
+      <button class="btn small ghost" id="btnP1">+1 Curso</button>
+      <button class="btn small ghost" id="btnP2">+1 Pack</button>
+      <button class="btn small ghost" id="btnP3">+1 Mentoria</button>
+      <button class="btn small" style="border-color:#ff6a80;color:#ff6a80" id="btnReset">Reset</button>
+    </div>
+    <div class="hint">Os dados ficam só no seu navegador (localStorage).</div>
+  </div>
+
+  <!-- TradingView script -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js" async></script>
+
+  <script>
+    // Helpers
+    const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+    const USD = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+    const $$ = s => document.querySelector(s);
+    const on = (el, evt, fn) => el && el.addEventListener(evt, fn);
+
+    // Footer year
+    $$("#year").textContent = new Date().getFullYear();
+
+    // Theme toggle
+    const themeBtn = $$("#themeToggle");
+    const applyTheme = t => {
+      document.body.classList.toggle("theme-gray", t === "gray");
+      themeBtn.textContent = t === "gray" ? "Tema: Cinza" : "Tema: Verde";
+      localStorage.setItem("k-theme", t);
+    };
+    applyTheme(localStorage.getItem("k-theme") || "green");
+    on(themeBtn, "click", () => {
+      const next = document.body.classList.contains("theme-gray") ? "green" : "gray";
+      applyTheme(next);
+    });
+
+    // TradingView chart init
+    function initTV() {
+      if (!window.TradingView || !document.getElementById("tv-btc")) return;
+      try {
+        new TradingView.widget({
+          autosize: true,
+          symbol: "BINANCE:BTCUSDT",
+          interval: "60",
+          timezone: "Etc/UTC",
+          theme: "dark",
+          style: "1",
+          backgroundColor: "rgba(14,15,17,0)",
+          hide_top_toolbar: true,
+          hide_legend: true,
+          container_id: "tv-btc"
+        });
+      } catch (e) {}
+    }
+    const tvInterval = setInterval(() => {
+      if (window.TradingView) { initTV(); clearInterval(tvInterval); }
+    }, 400);
+
+    // Bitcoin price fetcher (Coinbase -> Coingecko fallback)
+    async function fetchBTC() {
+      let data = null;
+      try {
+        // Coinbase spot
+        const [brl, usd] = await Promise.all([
+          fetch("https://api.coinbase.com/v2/prices/BTC-BRL/spot").then(r => r.json()),
+          fetch("https://api.coinbase.com/v2/prices/BTC-USD/spot").then(r => r.json())
+        ]);
+        data = {
+          brl: parseFloat(brl?.data?.amount || "0"),
+          usd: parseFloat(usd?.data?.amount || "0")
+        };
+      } catch (e) {
+        try {
+          // Coingecko simple price
+          const cg = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=brl,usd&include_24hr_change=true").then(r => r.json());
+          data = {
+            brl: cg?.bitcoin?.brl || 0,
+            usd: cg?.bitcoin?.usd || 0,
+            brlChg: cg?.bitcoin?.brl_24h_change || 0,
+            usdChg: cg?.bitcoin?.usd_24h_change || 0
+          };
+        } catch (e2) {
+          console.warn("Falha nos feeds BTC");
+        }
+      }
+      if (!data) return;
+
+      // Try changes via alternate endpoint if not provided
+      if (data.brlChg === undefined || data.usdChg === undefined) {
+        try {
+          const cg2 = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false").then(r => r.json());
+          const chg = cg2?.market_data?.price_change_percentage_24h ?? 0;
+          data.brlChg = chg;
+          data.usdChg = chg;
+        } catch(e){}
+      }
+
+      // Update UI
+      const brlEl = $$("#btc-brl");
+      const usdEl = $$("#btc-usd");
+      const brlChgEl = $$("#btc-brl-chg");
+      const usdChgEl = $$("#btc-usd-chg");
+      const sBtc = $$("#s-btc");
+
+      if (brlEl) brlEl.textContent = BRL.format(data.brl);
+      if (usdEl) usdEl.textContent = USD.format(data.usd);
+      const setChg = (el, v) => {
+        if (!el) return;
+        el.textContent = `${(v ?? 0).toFixed(2)}%`;
+        el.classList.remove("up", "down");
+        el.classList.add((v ?? 0) >= 0 ? "up" : "down");
+      };
+      setChg(brlChgEl, data.brlChg);
+      setChg(usdChgEl, data.usdChg);
+      if (sBtc) sBtc.textContent = BRL.format(data.brl);
+    }
+    fetchBTC();
+    setInterval(fetchBTC, 60_000);
+
+    // Sales stats (local, simulado)
+    const storeKey = "k-stats";
+    const defaultStats = { vendas: 0, receita: 0, p1: 0, p2: 0, p3: 0, ultima: null };
+    function loadStats() {
+      try { return JSON.parse(localStorage.getItem(storeKey)) || { ...defaultStats }; }
+      catch { return { ...defaultStats }; }
+    }
+    function saveStats(s) { localStorage.setItem(storeKey, JSON.stringify(s)); }
+    function updateStatsUI() {
+      const s = loadStats();
+      const ticket = s.vendas ? s.receita / s.vendas : 0;
+
+      const ids = [
+        ["#s-vendas", s.vendas],
+        ["#st-vendas", s.vendas],
+        ["#s-receita", BRL.format(s.receita)],
+        ["#st-receita", BRL.format(s.receita)],
+        ["#s-ticket", BRL.format(ticket)],
+        ["#st-ticket", BRL.format(ticket)],
+        ["#st-ultima", s.ultima ? new Date(s.ultima).toLocaleString("pt-BR") : "—"],
+        ["#p1", s.p1], ["#p2", s.p2], ["#p3", s.p3],
+      ];
+      ids.forEach(([id, val]) => { const el = $$(id); if (el) el.textContent = val; });
+    }
+    updateStatsUI();
+
+    // Admin panel toggle (Shift + D)
+    const admin = $$("#admin");
+    let adminOpen = false;
+    document.addEventListener("keydown", (e) => {
+      if (e.shiftKey && (e.key.toLowerCase() === "d")) {
+        adminOpen = !adminOpen;
+        admin.style.display = adminOpen ? "block" : "none";
+      }
+    });
+
+    // Admin actions
+    on($$("#btnAdd"), "click", () => {
+      const val = parseFloat($$("#valorVenda").value || "0");
+      if (!val || val <= 0) return;
+      const s = loadStats();
+      s.vendas += 1; s.receita += val; s.ultima = Date.now();
+      saveStats(s); updateStatsUI();
+      $$("#valorVenda").value = "";
+    });
+    on($$("#btnReset"), "click", () => {
+      saveStats({ ...defaultStats }); updateStatsUI();
+    });
+    on($$("#btnP1"), "click", () => { const s = loadStats(); s.p1 += 1; saveStats(s); updateStatsUI() });
+    on($$("#btnP2"), "click", () => { const s = loadStats(); s.p2 += 1; saveStats(s); updateStatsUI() });
+    on($$("#btnP3"), "click", () => { const s = loadStats(); s.p3 += 1; saveStats(s); updateStatsUI() });
+  </script>
+</body>
+</html>
